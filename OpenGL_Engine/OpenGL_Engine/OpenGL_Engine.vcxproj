@@ -71,22 +71,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)\build\$(Configuration)\$(Platform)\</OutDir>
-    <IncludePath>$(SolutionDir)dependancies\glfw\include\;$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\glm\;$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)aie-dependancies\;$(SolutionDir)dependancies\glfw\include\;$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\glm\;$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)dependancies\glfw\lib-vc2015\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>(SolutionDir)\build\$(Configuration)\$(Platform)\</OutDir>
-    <IncludePath>$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\glm\;$(SolutionDir)dependancies\glfw\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)aie-dependancies\;$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\glm\;$(SolutionDir)dependancies\glfw\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)dependancies\glfw\lib-vc2015\x64\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>(SolutionDir)\build\$(Configuration)\$(Platform)\</OutDir>
-    <IncludePath>$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\glm\;$(SolutionDir)dependancies\glfw\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)aie-dependancies\;$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\glm\;$(SolutionDir)dependancies\glfw\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)dependancies\glfw\lib-vc2015\x64\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>(SolutionDir)\build\$(Configuration)\$(Platform)\</OutDir>
-    <IncludePath>$(SolutionDir)dependancies\glfw\include\;$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\glm\;$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)aie-dependancies\;$(SolutionDir)dependancies\glfw\include\;$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\glm\;$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)dependancies\glfw\lib-vc2015\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -144,8 +144,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\aie-dependancies\Gizmos.cpp" />
     <ClCompile Include="..\dependancies\opengl_core\gl_core_4_4.c" />
+    <ClCompile Include="Application.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Application.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

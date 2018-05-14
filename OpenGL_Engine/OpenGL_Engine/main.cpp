@@ -1,46 +1,54 @@
-#include <gl_core_4_4.h>
-#include <GLFW/glfw3.h>
 #include <iostream>
+#include "Application.h"
+#include <Gizmos.h>
 
+class App : public Application
+{
+public:
+	App() {}
+	~App() {}
+
+	virtual int startup()
+	{
+		return 0;
+	}
+	virtual void update(float deltaTime)
+	{
+
+	}
+	virtual void draw()
+	{
+		clearScreen();
+
+		aie::Gizmos::clear();
+
+		aie::Gizmos::addTransform(glm::mat4(1));
+
+		glm::vec4 white(1);
+		glm::vec4 black(0, 0, 0, 1);
+
+		for (int i = 0; i < 23; i++)
+		{
+			aie::Gizmos::addLine(glm::vec3(-10 + i, 0, 10), glm::vec3(-10 + i, 0, -10), i == 10 ? white : black);
+			aie::Gizmos::addLine(glm::vec3(10, 0, -10 + i), glm::vec3(-10, 0, -10 + i), i == 10 ? white : black);
+		}
+
+		aie::Gizmos::draw(getProjection() * getView());
+	}
+	virtual void shutdown()
+	{
+
+	}
+};
 
 int main()
 {
-	//If something is broken does launch program, missing graphics card, missing monitor
-	if (glfwInit() == false)
-	{
-		return -1;
-	}
+	App app = App();
 
-	//Creates a window with size, name, default monitor and no screen hijacking
-	GLFWwindow* window = glfwCreateWindow(1280, 720, "Graphics Engine", nullptr, nullptr);
-	//If window isnt created properly closes program
-	if (window == nullptr)
-	{
-		glfwTerminate();
-		return -2;
-	}
-
-	//The current thread is the one we are working on
-	//Opengl is only single threaded
-	glfwMakeContextCurrent(window);
-
-	//Setup OpenGL, if opengl failed in setting up pointer functions, destroys window
-	if (ogl_LoadFunctions() != ogl_LOAD_SUCCEEDED)
-	{
-		glfwDestroyWindow(window);
-		glfwTerminate();
-		return -3;
-	}
-
-	auto major = ogl_GetMajorVersion();
-	auto minor = ogl_GetMinorVersion();
-
-	std::cout << major << "." << minor << std::endl;
-
-	///Do our drawing
-
-	glfwDestroyWindow(window);
-	glfwTerminate();
+	app.run(1280, 720, "Graphics Engine");
 
 	return 0;
 }
+
+
+/*	*/
