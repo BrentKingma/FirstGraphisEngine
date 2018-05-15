@@ -5,6 +5,11 @@ VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL_Engine", "OpenGL_Engine\OpenGL_Engine.vcxproj", "{2143BBD4-85FA-4661-B509-6846FED4FA0B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SolarSystem", "SolarSystem\SolarSystem.vcxproj", "{0C3C9DBA-2C32-4292-B623-AF61072320FA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2143BBD4-85FA-4661-B509-6846FED4FA0B} = {2143BBD4-85FA-4661-B509-6846FED4FA0B}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +26,14 @@ Global
 		{2143BBD4-85FA-4661-B509-6846FED4FA0B}.Release|x64.Build.0 = Release|x64
 		{2143BBD4-85FA-4661-B509-6846FED4FA0B}.Release|x86.ActiveCfg = Release|Win32
 		{2143BBD4-85FA-4661-B509-6846FED4FA0B}.Release|x86.Build.0 = Release|Win32
+		{0C3C9DBA-2C32-4292-B623-AF61072320FA}.Debug|x64.ActiveCfg = Debug|x64
+		{0C3C9DBA-2C32-4292-B623-AF61072320FA}.Debug|x64.Build.0 = Debug|x64
+		{0C3C9DBA-2C32-4292-B623-AF61072320FA}.Debug|x86.ActiveCfg = Debug|Win32
+		{0C3C9DBA-2C32-4292-B623-AF61072320FA}.Debug|x86.Build.0 = Debug|Win32
+		{0C3C9DBA-2C32-4292-B623-AF61072320FA}.Release|x64.ActiveCfg = Release|x64
+		{0C3C9DBA-2C32-4292-B623-AF61072320FA}.Release|x64.Build.0 = Release|x64
+		{0C3C9DBA-2C32-4292-B623-AF61072320FA}.Release|x86.ActiveCfg = Release|Win32
+		{0C3C9DBA-2C32-4292-B623-AF61072320FA}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

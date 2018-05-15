@@ -1,5 +1,14 @@
 #include "Application.h"
+#include <gl_core_4_4.h>
+#include <GLFW/glfw3.h>
 #include <Gizmos.h>
+#include "Camera.h"
+#pragma warning( push )
+#pragma warning( disable : 4201 )
+#pragma warning( disable : 4310 )
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
+#pragma warning( pop )
 #include <stdexcept>
 #include <iostream>
 
@@ -18,13 +27,9 @@ void Application::run(int a_screenWidth, int a_screenHeight, const char * a_wind
 	{
 		double prevTime = glfwGetTime();
 		double currTine = 0;
-		double deltaTime = 0;
+		
 		unsigned int frames = 0;
 		double fpsInterval = 0;
-
-		aie::Gizmos::create(32000, 1800, 32000, 1800);
-		m_view = glm::lookAt(glm::vec3(10, 10, 10), glm::vec3(0), glm::vec3(0, 1, 0));
-		m_projection = glm::perspective(glm::pi<float>() * 0.25f, 16 / 9.0f, 0.1f, 1000.0f);
 
 		while (true)
 		{
@@ -66,6 +71,57 @@ void Application::clearScreen()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+void Application::setBackgroundColour(float a_r, float a_g, float a_b, float a_a)
+{
+	glClearColor(a_r, a_g, a_b, a_a);
+}
+
+void Application::setShowCursor(bool a_visible)
+{
+	ShowCursor(a_visible);
+}
+
+void Application::setVSync(bool a_enabled)
+{
+	glfwSwapInterval(a_enabled ? 1 : 0);
+}
+
+unsigned int Application::getWindowWidth() const 
+{
+	int w = 0, h = 0;
+	glfwGetWindowSize(m_window, &w, &h);
+	return w;
+}
+
+unsigned int Application::getWindowHeight() const
+{
+	int w = 0, h = 0;
+	glfwGetWindowSize(m_window, &w, &h);
+	return h;
+}
+
+float Application::getTime() const
+{
+	return (float)glfwGetTime();
+}
+
+float Application::getDeltaTime() const
+{
+	return (float)deltaTime;
+}
+
+bool Application::hasWindowSizeChanged()
+{
+	if (windowWidth != getWindowWidth() || windowHeight != getWindowHeight())
+	{
+		windowWidth = getWindowWidth();
+		windowHeight = getWindowHeight();
+
+		return true;
+	}
+	return false;
+}
+
 int Application::createWindow(int a_screenWidth, int a_screenHeight, const char * a_windowName)
 {
 	//If something is broken does launch program, missing graphics card, missing monitor
@@ -95,8 +151,16 @@ int Application::createWindow(int a_screenWidth, int a_screenHeight, const char 
 		return -3;
 	}
 
-	glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
-	glEnable(GL_DEPTH);
+	glClearColor(0, 0, 0, 1.0f);
+	
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	windowWidth = a_screenWidth;
+	windowHeight = a_screenHeight;
 
 	return 0;
 }

@@ -26,26 +26,26 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -70,24 +70,34 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)\build\$(Configuration)\$(Platform)\</OutDir>
-    <IncludePath>$(SolutionDir)aie-dependancies\;$(SolutionDir)dependancies\glfw\include\;$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\glm\;$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)dependancies\glfw\lib-vc2015\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\build\$(ProjectName)\$(Configuration)\$(Platform)\</OutDir>
+    <IncludePath>$(SolutionDir)aie-dependancies\;$(VC_IncludePath);$(SolutionDir)dependancies\glfw\include\;$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\glm\;$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(NETFXKitsDir)Lib\um\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)dependancies\glfw\lib-vc2015\</LibraryPath>
+    <TargetExt>.lib</TargetExt>
+    <IntDir>$(SolutionDir)\temp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_Debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>(SolutionDir)\build\$(Configuration)\$(Platform)\</OutDir>
-    <IncludePath>$(SolutionDir)aie-dependancies\;$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\glm\;$(SolutionDir)dependancies\glfw\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)dependancies\glfw\lib-vc2015\x64\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\build\$(ProjectName)\$(Configuration)\$(Platform)\</OutDir>
+    <IncludePath>$(WindowsSDK_IncludePath);$(VC_IncludePath);$(SolutionDir)aie-dependancies\;$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\glm\;$(SolutionDir)dependancies\glfw\include\</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;$(SolutionDir)dependancies\glfw\lib-vc2015\x64\;$(LibraryPath)</LibraryPath>
+    <TargetExt>.lib</TargetExt>
+    <IntDir>$(SolutionDir)\temp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_Debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>(SolutionDir)\build\$(Configuration)\$(Platform)\</OutDir>
-    <IncludePath>$(SolutionDir)aie-dependancies\;$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\glm\;$(SolutionDir)dependancies\glfw\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)dependancies\glfw\lib-vc2015\x64\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\build\$(ProjectName)\$(Configuration)\$(Platform)\</OutDir>
+    <IncludePath>$(WindowsSDK_IncludePath);$(VC_IncludePath);$(SolutionDir)aie-dependancies\;$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\glm\;$(SolutionDir)dependancies\glfw\include\</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;$(SolutionDir)dependancies\glfw\lib-vc2015\x64\;$(LibraryPath)</LibraryPath>
+    <TargetExt>.lib</TargetExt>
+    <IntDir>$(SolutionDir)\temp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>(SolutionDir)\build\$(Configuration)\$(Platform)\</OutDir>
-    <IncludePath>$(SolutionDir)aie-dependancies\;$(SolutionDir)dependancies\glfw\include\;$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\glm\;$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)dependancies\glfw\lib-vc2015\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\build\$(ProjectName)\$(Configuration)\$(Platform)\</OutDir>
+    <IncludePath>$(SolutionDir)aie-dependancies\;$(VC_IncludePath);$(SolutionDir)dependancies\glfw\include\;$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\glm\;$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(NETFXKitsDir)Lib\um\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)dependancies\glfw\lib-vc2015\</LibraryPath>
+    <TargetExt>.lib</TargetExt>
+    <IntDir>$(SolutionDir)\temp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -100,6 +110,9 @@
     <Link>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -109,8 +122,11 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glfw3.lib;opengl64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -127,6 +143,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -140,17 +159,23 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glfw3.lib;opengl64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\aie-dependancies\Gizmos.cpp" />
+    <ClCompile Include="..\aie-dependancies\Shader.cpp" />
     <ClCompile Include="..\dependancies\opengl_core\gl_core_4_4.c" />
     <ClCompile Include="Application.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Mesh.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
