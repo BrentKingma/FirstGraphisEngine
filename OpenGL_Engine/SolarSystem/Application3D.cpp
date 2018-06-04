@@ -68,27 +68,29 @@ int Application3D::startup()
 		printf("Shader Error: %s\n", m_quadShader.getLastError());
 		return -5;
 	}
-	if (m_gridTexture.load("./textures/numbered_grid.tga") == false)
+	if (m_swordMesh.load("./bin/objects/Dragon.obj") == false)
 	{
-		printf("Grid texture failed");
-		return -4;
+		printf("Object didnt load \n");
+		return -3;
 	}
+	
 	if (m_swordShader.link() == false)
 	{
 		printf("Shader Error: %s\n", m_swordShader.getLastError());
 		return -2;
 	}
-	if (m_swordMesh.load("./objects/soulspear/soulspear.obj", true , true) == false)
+	if (m_gridTexture.load("./bin/textures/numbered_grid.tga") == false)
 	{
-		printf("Object didnt load \n");
-		return -3;
+		printf("Grid texture failed");
+		return -4;
 	}
+	
 
 	unsigned char texelData[4] = { 0, 255, 255, 0 };
 	m_texture.create(2, 2, aie::Texture::RED, texelData);
 
 	m_quadMesh.initialiseQuad();
-
+	
 	m_quadTransform = { 10, 0, 0, 0,
 						0, 10, 0, 0,
 						0, 0, 10, 0,
@@ -103,6 +105,8 @@ int Application3D::startup()
 						 0, 1, 0, 0,
 						 0, 0, 1, 0,
 						 0, 0, 0, 1 };
+
+	
 
 	return 0;
 }
@@ -162,15 +166,18 @@ void Application3D::draw()
 	m_quadShader.bindUniform("Is", m_light.specular);
 	m_quadShader.bindUniform("LightDirection", m_light.direction);
 
-	m_quadShader.bindUniform("Ka", materialAmbientLight);
+	/*m_quadShader.bindUniform("Ka", materialAmbientLight);
 	m_quadShader.bindUniform("Kd", materialDiffuse);
 	m_quadShader.bindUniform("Ks", materialSpecular);
-	m_quadShader.bindUniform("specularPower", materialSpecturalPower);
+	m_quadShader.bindUniform("specularPower", materialSpecturalPower);*/
 	//-------------------------------------------------------------
-	m_quadShader.bindUniform("ProjectionViewModel", m_camera.getProjectionView() * m_quadTransform);
-	m_quadShader.bindUniform("NormalMatrix", glm::inverseTranspose(glm::mat3(m_quadTransform)));
+	m_quadShader.bindUniform("ProjectionViewModel", m_camera.getProjectionView() * m_swordTransform);
+	m_quadShader.bindUniform("NormalMatrix", glm::inverseTranspose(glm::mat3(m_swordTransform)));
 	m_quadShader.bindUniform("cameraPosition", m_camera.getPosition());
 	
+	m_swordMesh.draw();
+
+	m_swordShader.bind();
 
 	m_quadMesh.draw();
 

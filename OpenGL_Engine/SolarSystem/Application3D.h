@@ -56,10 +56,10 @@ private:
 	float materialSpecturalPower;
 	
 
-	const char* m_vertShader = "./shaders/bunnyShader.vert";
-	const char* m_fragShader = "./shaders/bunnyShader.frag";
+	const char* m_vertShader = "./bin/shaders/bunnyShader.vert";
+	const char* m_fragShader = "./bin/shaders/bunnyShader.frag";
 
-	const char* m_quadVertShader = "./shaders/textured.vert";
-	const char* m_quadFragShader = "./shaders/textured.frag";
+	const char* m_quadVertShader = "./bin/shaders/textured.vert";
+	const char* m_quadFragShader = "./bin/shaders/textured.frag";
 };
 

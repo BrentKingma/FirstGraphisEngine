@@ -78,8 +78,8 @@
     <TargetName>$(ProjectName)_Debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)\build\$(ProjectName)\$(Configuration)\$(Platform)\</OutDir>
-    <IncludePath>$(WindowsSDK_IncludePath);$(VC_IncludePath);$(SolutionDir)aie-dependancies\;$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\glm\;$(SolutionDir)dependancies\glfw\include\</IncludePath>
+    <OutDir>..\build\OpenGL_Engine\$(Configuration)\$(Platform)\</OutDir>
+    <IncludePath>$(WindowsSDK_IncludePath);$(VC_IncludePath);$(SolutionDir)aie-dependancies\;$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\glm\;$(SolutionDir)dependancies\stb\;$(SolutionDir)dependancies\glfw\include\</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;$(SolutionDir)dependancies\glfw\lib-vc2015\x64\;$(LibraryPath)</LibraryPath>
     <TargetExt>.lib</TargetExt>
     <IntDir>$(SolutionDir)\temp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
