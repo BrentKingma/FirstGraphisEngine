@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)\build\$(ProjectName)\$(Configuration)\$(Platform)\</OutDir>
-    <IncludePath>$(SolutionDir)aie-dependancies\;$(VC_IncludePath);$(SolutionDir)dependancies\glfw\include\;$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\glm\;$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)aie-dependancies\;$(VC_IncludePath);$(SolutionDir)dependancies\glfw\include\;$(SolutionDir)dependancies\opengl_core\;$(SolutionDir)dependancies\stb\;$(SolutionDir)dependancies\glm\;$(WindowsSDK_IncludePath)</IncludePath>
     <LibraryPath>$(NETFXKitsDir)Lib\um\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)dependancies\glfw\lib-vc2015\</LibraryPath>
     <TargetExt>.lib</TargetExt>
     <IntDir>$(SolutionDir)\temp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
@@ -167,7 +167,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\aie-dependancies\Gizmos.cpp" />
+    <ClCompile Include="..\aie-dependancies\OBJMesh.cpp" />
     <ClCompile Include="..\aie-dependancies\Shader.cpp" />
+    <ClCompile Include="..\aie-dependancies\Texture.cpp" />
     <ClCompile Include="..\dependancies\opengl_core\gl_core_4_4.c" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Mesh.cpp" />
