@@ -11,6 +11,9 @@
 #pragma warning( pop )
 #include <stdexcept>
 #include <iostream>
+#include <imgui.h>
+#include <Input.h>
+#include "imgui_glfw3.h"
 
 
 Application::Application()
@@ -53,9 +56,15 @@ void Application::run(int a_screenWidth, int a_screenHeight, const char * a_wind
 			
 			glfwPollEvents();
 
+			aie::Input::getInstance()->clearStatus();
+
+			aie::ImGui_NewFrame();
+
 			update(float(deltaTime));
 
 			draw();
+
+			ImGui::Render();
 			
 			//Buffer we reading to printing and printing to reading
 			glfwSwapBuffers(m_window);
@@ -162,12 +171,18 @@ int Application::createWindow(int a_screenWidth, int a_screenHeight, const char 
 	windowWidth = a_screenWidth;
 	windowHeight = a_screenHeight;
 
+	aie::Input::create();
+
+	aie::ImGui_Init(m_window, true);
+
 	return 0;
 }
 
 void Application::destroyWindow()
 {
 	aie::Gizmos::destroy();
+	aie::ImGui_Shutdown();
+	aie::Input::destroy();
 	glfwDestroyWindow(m_window);
 	glfwTerminate();
 }

@@ -2,6 +2,8 @@
 #include <glm/ext.hpp>
 #include <Gizmos.h>
 #include <GLFW\glfw3.h>
+#include <imgui.h>
+#include <Light.h>
 
 Application3D::Application3D()
 {
@@ -13,6 +15,8 @@ Application3D::~Application3D()
 {
 
 }
+
+std::vector<Light*> Light::m_lights;
 
 int Application3D::startup()
 {
@@ -44,9 +48,12 @@ int Application3D::startup()
 	m_swordShader.loadShader(aie::eShaderStage::VERTEX, m_quadVertShader);
 	m_swordShader.loadShader(aie::eShaderStage::FRAGMENT, m_quadFragShader);
 
-	m_light.diffuse = { 1, 1, 0 };
-	m_light.specular = { 1, 1, 0 };
-	m_ambientLight = { 0.25f, 0.25f, 0.25f };
+	Light::AddLight(new Light({ 0, 0, 0 }, { 0.25f, 0.25f, 0.25f }, { 1, 1, 0 }, { 1, 1, 0 }));
+	Light::AddLight(new Light({ 0, 0, 0 }, { 0.25f, 0.25f, 0.25f }, { 1, 1, 0 }, { 1, 1, 0 }));
+
+	/*m_light->diffuse = { 1, 1, 0 };
+	m_light->specular = { 1, 1, 0 };
+	m_ambientLight = { 0.25f, 0.25f, 0.25f };*/
 
 	materialAmbientLight = { 1.0f, 1.0f, 1.0f };
 	materialDiffuse = { 1.0f, 1.0f, 1.0f };
@@ -68,7 +75,7 @@ int Application3D::startup()
 		printf("Shader Error: %s\n", m_quadShader.getLastError());
 		return -5;
 	}
-	if (m_swordMesh.load("./bin/objects/Dragon.obj") == false)
+	if (m_swordMesh.load("./objects/soulspear/soulspear.obj", true, true) == false)
 	{
 		printf("Object didnt load \n");
 		return -3;
@@ -79,7 +86,7 @@ int Application3D::startup()
 		printf("Shader Error: %s\n", m_swordShader.getLastError());
 		return -2;
 	}
-	if (m_gridTexture.load("./bin/textures/numbered_grid.tga") == false)
+	if (m_gridTexture.load("./textures/numbered_grid.tga") == false)
 	{
 		printf("Grid texture failed");
 		return -4;
@@ -152,32 +159,44 @@ void Application3D::update(float deltaTime)
 	}
 
 	float time = getTime();
-	m_light.direction = glm::normalize(glm::vec3(glm::cos(time * 2), glm::sin(time * 2), 0));
+	ImGUI();
+	*Light::m_lights[0]->GetDirection() = glm::normalize(glm::vec3( xDir1, yDir1, zDir1 ));
+	*Light::m_lights[1]->GetDirection() = glm::normalize(glm::vec3(xDir2, yDir2, zDir2));
 }
 
 void Application3D::draw()
 {
 	clearScreen();
-
-	m_quadShader.bind();
+	
+	m_swordShader.bind();
 	//Binds light
-	m_quadShader.bindUniform("Ia", m_ambientLight);
-	m_quadShader.bindUniform("Id", m_light.diffuse);
-	m_quadShader.bindUniform("Is", m_light.specular);
-	m_quadShader.bindUniform("LightDirection", m_light.direction);
+	for (int i = 0; i < Light::m_lights.size(); i++)
+	{
+		std::string directionName = "lights[" + std::to_string(i) + "].m_direction";
+		std::string ambientName = "lights[" + std::to_string(i) + "].m_ambient";
+		std::string diffuseName = "lights[" + std::to_string(i) + "].m_diffuse";
+		std::string specularName = "lights[" + std::to_string(i) + "].m_specular";
 
-	/*m_quadShader.bindUniform("Ka", materialAmbientLight);
-	m_quadShader.bindUniform("Kd", materialDiffuse);
-	m_quadShader.bindUniform("Ks", materialSpecular);
-	m_quadShader.bindUniform("specularPower", materialSpecturalPower);*/
+		m_swordShader.bindUniform(directionName.c_str(), *Light::m_lights[i]->GetDirection());
+		m_swordShader.bindUniform(ambientName.c_str(), *Light::m_lights[i]->GetAmbient());
+		m_swordShader.bindUniform(diffuseName.c_str(), *Light::m_lights[i]->GetDiffuse());
+		m_swordShader.bindUniform(specularName.c_str(), *Light::m_lights[i]->GetSpecular());
+	}
+	
+		//m_swordShader.bindUniform("LightDirection", *Light::m_lights[i]->GetDirection());	
+
+	/*m_swordShader.bindUniform("Ka", materialAmbientLight);
+	m_swordShader.bindUniform("Kd", materialDiffuse);
+	m_swordShader.bindUniform("Ks", materialSpecular);
+	m_swordShader.bindUniform("specularPower", materialSpecturalPower);*/
 	//-------------------------------------------------------------
-	m_quadShader.bindUniform("ProjectionViewModel", m_camera.getProjectionView() * m_swordTransform);
-	m_quadShader.bindUniform("NormalMatrix", glm::inverseTranspose(glm::mat3(m_swordTransform)));
-	m_quadShader.bindUniform("cameraPosition", m_camera.getPosition());
+	m_swordShader.bindUniform("ProjectionViewModel", m_camera.getProjectionView() * m_swordTransform);
+	m_swordShader.bindUniform("NormalMatrix", glm::inverseTranspose(glm::mat3(m_swordTransform)));
+	m_swordShader.bindUniform("cameraPosition", m_camera.getPosition());
 	
 	m_swordMesh.draw();
 
-	m_swordShader.bind();
+	m_quadShader.bind();
 
 	m_quadMesh.draw();
 
@@ -201,11 +220,36 @@ void Application3D::draw()
 		aie::Gizmos::addLine(glm::vec3(-10 + i, 0, 10), glm::vec3(-10 + i, 0, -10), i == 10 ? white : black);
 		aie::Gizmos::addLine(glm::vec3(10, 0, -10 + i), glm::vec3(-10, 0, -10 + i), i == 10 ? white : black);
 	}
+	for (int i = 0; i < Light::m_lights.size(); i++)
+	{
+		aie::Gizmos::addSphere(*Light::m_lights[i]->GetDirection(), 0.2, 32, 32, { 1, 0, 0, 1 });
+	}
 	
 	aie::Gizmos::draw(m_camera.getProjectionView());
 	aie::Gizmos::draw2D((float)getWindowWidth(), (float)getWindowHeight());
+
+	
 }
 
 void Application3D::shutdown()
 {
+}
+
+void Application3D::ImGUI()
+{
+	ImGui::Begin("Light 1 Direction");
+
+	ImGui::InputFloat("X Direction: ", &xDir1, 1);
+	ImGui::InputFloat("Y Direction: ", &yDir1, 1);
+	ImGui::InputFloat("Z Direction: ", &zDir1, 1);
+
+	ImGui::End();
+
+	ImGui::Begin("Light 2 Direction");
+
+	ImGui::InputFloat("X Direction: ", &xDir2, 1);
+	ImGui::InputFloat("Y Direction: ", &yDir2, 1);
+	ImGui::InputFloat("Z Direction: ", &zDir2, 1);
+
+	ImGui::End();
 }

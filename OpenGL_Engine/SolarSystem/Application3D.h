@@ -18,6 +18,8 @@ public:
 	virtual void shutdown();
 
 private:
+	void ImGUI();
+
 	Camera m_camera;
 
 	float m_moveSpeed = 10;
@@ -41,13 +43,17 @@ private:
 	glm::mat4 m_swordTransform;
 	aie::Texture m_swordTexture;
 
-	struct Light
-	{
-		glm::vec3 direction;//ld
-		glm::vec3 diffuse;//ld
-		glm::vec3 specular;//ls
-	};
-	Light m_light;
+	//struct Light
+	//{
+	//	Light()
+	//	{
+	//		direction = { 0.0f, 0.0f, 0.0f };
+	//	}
+	//	glm::vec3 direction;//ld
+	//	glm::vec3 diffuse;//ld
+	//	glm::vec3 specular;//ls
+	//};
+	//Light* m_light;
 	glm::vec3 m_ambientLight;//la
 
 	glm::vec3 materialDiffuse;
@@ -55,11 +61,13 @@ private:
 	glm::vec3 materialAmbientLight;
 	float materialSpecturalPower;
 	
+	float xDir1, yDir1, zDir1 = 0.0f;
+	float xDir2, yDir2, zDir2 = 0.0f;
 
-	const char* m_vertShader = "./bin/shaders/bunnyShader.vert";
-	const char* m_fragShader = "./bin/shaders/bunnyShader.frag";
+	const char* m_vertShader = "./shaders/bunnyShader.vert";
+	const char* m_fragShader = "./shaders/bunnyShader.frag";
 
-	const char* m_quadVertShader = "./bin/shaders/textured.vert";
-	const char* m_quadFragShader = "./bin/shaders/textured.frag";
+	const char* m_quadVertShader = "./shaders/textured.vert";
+	const char* m_quadFragShader = "./shaders/textured.frag";
 };
 

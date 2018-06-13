@@ -82,7 +82,7 @@
     <OutDir>$(SolutionDir)\build\$(ProjectName)\$(Configuration)\$(Platform)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)dependancies\glfw\include\;$(SolutionDir)aie-dependancies\;$(SolutionDir)dependancies\glm\;$(WindowsSDK_IncludePath);$(VC_IncludePath);$(SolutionDir)OpenGL_Engine</IncludePath>
+    <IncludePath>$(SolutionDir)dependancies\imgui\;$(SolutionDir)dependancies\glfw\include\;$(SolutionDir)aie-dependancies\;$(SolutionDir)dependancies\glm\;$(WindowsSDK_IncludePath);$(VC_IncludePath);$(SolutionDir)OpenGL_Engine</IncludePath>
     <LibraryPath>$(SolutionDir)dependancies\glfw\lib-vc2015\;$(SolutionDir)build\OpenGL_Engine\Debug\Win32\;$(NETFXKitsDir)Lib\um\x86;$(WindowsSDK_LibraryPath_x86);$(VC_LibraryPath_x86);$(LibraryPath)</LibraryPath>
     <IntDir>$(SolutionDir)\temp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)\build\$(ProjectName)\$(Configuration)\$(Platform)\</OutDir>

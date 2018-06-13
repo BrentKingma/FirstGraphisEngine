@@ -31,7 +31,6 @@ public:
 	GLFWwindow* getWindowPointer() const { return m_window; }
 	bool hasWindowSizeChanged();
 
-
 protected:
 	virtual int createWindow(int a_screenWidth, int a_screenHeight, const char* a_windowName);
 	void destroyWindow();
