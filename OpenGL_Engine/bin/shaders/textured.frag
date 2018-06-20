@@ -10,6 +10,7 @@ uniform vec3 Ia;
 uniform vec3 Id;
 uniform vec3 Is;
 uniform vec3 LightDirection;
+uniform int  HasTextures;
 
 struct Light
 {
@@ -37,23 +38,43 @@ out vec4 FragColour;
 vec3 CalcDirLight(Light light, vec3 a_normalNormalised, vec3 a_viewVector)
 {
 	vec3 lightDir = normalize(light.m_direction);
-
-	//Calculates the lambert term( negate light direction)
+	
 	float lambertTerm;
+	vec3 diffuse; 
+	vec3 ambient; 
+	vec3 specular;
+	float specularTerm;
+	vec3 reflectionVector;
+	vec3 texDiffuse; 
+	vec3 texSpecular;
+	
+	if(HasTextures == 1)//Has textures
+	{
+		lambertTerm = max( 0, min( 1, dot( a_normalNormalised, lightDir)));	
+	
+		texDiffuse = texture( diffuseTexture, vTexCoord ).rgb;
+		texSpecular = texture( specularTexture, vTexCoord ).rgb;
 
-	lambertTerm = max( 0, min( 1, dot( a_normalNormalised, lightDir)));	
+		reflectionVector = reflect( lightDir, a_normalNormalised);
 	
-	vec3 texDiffuse = texture( diffuseTexture, vTexCoord ).rgb;
-	vec3 texSpecular = texture( specularTexture, vTexCoord ).rgb;
+		specularTerm = pow(max(0, dot(reflectionVector, a_viewVector)), specularPower);
+	
+		diffuse = light.m_diffuse * Kd * texDiffuse * lambertTerm;
+		ambient = light.m_ambient * Ka;
+		specular = light.m_specular * Ks * texSpecular * specularTerm;
+	}
+	else//Has no textures
+	{
+		lambertTerm = max( 0, min( 1, dot( a_normalNormalised, lightDir)));	
 
-	vec3 reflectionVector = reflect( lightDir, a_normalNormalised);
+		reflectionVector = reflect( lightDir, a_normalNormalised);
 	
-	float specularTerm = pow(max(0, dot(reflectionVector, a_viewVector)), specularPower);
+		specularTerm = pow(max(0, dot(reflectionVector, a_viewVector)), specularPower);
 	
-	vec3 diffuse = light.m_diffuse * Kd * texDiffuse * lambertTerm;
-	vec3 ambient = light.m_ambient * Ka;
-	vec3 specular = light.m_specular * Ks * texSpecular * specularTerm;
-	
+		diffuse = light.m_diffuse * Kd * lambertTerm;
+		ambient = light.m_ambient * Ka;
+		specular = light.m_specular * Ks * specularTerm;
+	}
 	return(diffuse + ambient + specular);
 }
 
@@ -68,15 +89,18 @@ void main()
 	mat3 tbn = mat3( tangentNormalised, biTangentNormalised, normalNormalised );	
 	
 		vec3 texNormal = texture( normalTexture, vTexCoord ).rgb;
-	
-	normalNormalised = tbn * (texNormal * 2 - 1);
+	if(HasTextures == 1)
+	{
+		normalNormalised = tbn * (texNormal * 2 - 1);
+	}
 	
 	vec3 viewVector = normalize(cameraPosition - vPosition.xyz);
 	
-	vec3 resualt;
+	vec3 result = vec3(0, 0, 0);
 	for(int i = 0; i < NR_LIGHTS; i ++)
 	{
-		resualt += CalcDirLight(lights[i], normalNormalised, viewVector);
+		result += CalcDirLight(lights[i], normalNormalised, viewVector);
 	}
-	FragColour =  vec4(resualt, 1);///texture( diffuseTexture, vTexCoord));//vec4(ambient + diffuse + specular, 1);// ;
+	
+	FragColour =  vec4(result, 1);///texture( diffuseTexture, vTexCoord));//vec4(ambient + diffuse + specular, 1);// ;
 }

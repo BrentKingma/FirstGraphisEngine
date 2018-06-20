@@ -7,7 +7,7 @@
 
 Application3D::Application3D()
 {
-	
+
 }
 
 
@@ -23,7 +23,7 @@ int Application3D::startup()
 	setBackgroundColour(0.25f, 0.25f, 0.25f, 1.0f);
 
 	aie::Gizmos::create(64000, 10000, 64000, 10000);
-	
+
 	glm::mat4 view = glm::lookAt(glm::vec3(10, 10, 10), glm::vec3(0), glm::vec3(0, 1, 0));
 	m_viewMatrix = view;
 	m_camera.setViewMatrix(view);
@@ -39,14 +39,8 @@ int Application3D::startup()
 	}
 
 	//Loadshader compiles the shaders and gives it to the graphics card
-	m_bunnyShader.loadShader(aie::eShaderStage::VERTEX, m_vertShader);
-	m_bunnyShader.loadShader(aie::eShaderStage::FRAGMENT, m_fragShader);
-	
-	m_quadShader.loadShader(aie::eShaderStage::VERTEX, m_quadVertShader);
-	m_quadShader.loadShader(aie::eShaderStage::FRAGMENT, m_quadFragShader);
-
-	m_swordShader.loadShader(aie::eShaderStage::VERTEX, m_quadVertShader);
-	m_swordShader.loadShader(aie::eShaderStage::FRAGMENT, m_quadFragShader);
+	m_Shader.loadShader(aie::eShaderStage::VERTEX, m_quadVertShader);
+	m_Shader.loadShader(aie::eShaderStage::FRAGMENT, m_quadFragShader);
 
 	Light::AddLight(new Light({ 0, 0, 0 }, { 0.25f, 0.25f, 0.25f }, { 1, 1, 0 }, { 1, 1, 0 }));
 	Light::AddLight(new Light({ 0, 0, 0 }, { 0.25f, 0.25f, 0.25f }, { 1, 1, 0 }, { 1, 1, 0 }));
@@ -70,48 +64,46 @@ int Application3D::startup()
 		printf("Object didnt load \n");
 		return -3;
 	}*/
-	if (m_quadShader.link() == false)
+	if (m_Shader.link() == false)
 	{
-		printf("Shader Error: %s\n", m_quadShader.getLastError());
+		printf("Shader Error: %s\n", m_Shader.getLastError());
 		return -5;
 	}
-	if (m_swordMesh.load("./objects/soulspear/soulspear.obj", true, true) == false)
+	if (m_soulspearMesh.load("./objects/ball/soulspear.obj", true, true) == false)
 	{
 		printf("Object didnt load \n");
 		return -3;
 	}
-	
-	if (m_swordShader.link() == false)
+
+	if (m_bunnyMesh.load("./objects/Bunny.obj", false) == false)
 	{
-		printf("Shader Error: %s\n", m_swordShader.getLastError());
-		return -2;
+		printf("Object didnt load \n");
+		return -3;
 	}
-	if (m_gridTexture.load("./textures/numbered_grid.tga") == false)
+
+	if (m_c3poMesh.load("./objects/c3po/C3PO.obj", true, true) == false)
 	{
-		printf("Grid texture failed");
-		return -4;
-	}
+		printf("Object didnt load \n");
+		return -3;
+	}	
 	
 
 	unsigned char texelData[4] = { 0, 255, 255, 0 };
-	m_texture.create(2, 2, aie::Texture::RED, texelData);
 
-	m_quadMesh.initialiseQuad();
-	
-	m_quadTransform = { 10, 0, 0, 0,
-						0, 10, 0, 0,
-						0, 0, 10, 0,
-						0, 0, 0, 1 };
+	m_soulspearTransform = { 0.2, 0, 0, 0,
+						   0, 0.2, 0, 0,
+						   0, 0, 0.2, 0,
+						   0, 0, 0, 1 };
 
-	m_bunnyTransform = { 0.5f, 0, 0, 0,
-						 0, 0.5f, 0, 0,
-						 0, 0, 0.5f, 0,
-						 0, 0, 0, 1 };
+	m_bunnyTransform = { 0.2, 0, 0, 0,
+		0, 0.2 , 0, 0,
+		0, 0, 0.2, 0,
+		2, 0, 0, 2 };
 
-	m_swordTransform = { 1, 0, 0, 0,
-						 0, 1, 0, 0,
-						 0, 0, 1, 0,
-						 0, 0, 0, 1 };
+	m_c3poTransform = { 0.2, 0, 0, 0,
+		0, 0.2 , 0, 0,
+		0, 0, 0.2, 0,
+		-2, 0, 15, 2 };
 
 	
 
@@ -167,9 +159,8 @@ void Application3D::update(float deltaTime)
 void Application3D::draw()
 {
 	clearScreen();
-	
-	m_swordShader.bind();
-	//Binds light
+
+	m_Shader.bind();
 	for (int i = 0; i < Light::m_lights.size(); i++)
 	{
 		std::string directionName = "lights[" + std::to_string(i) + "].m_direction";
@@ -177,28 +168,36 @@ void Application3D::draw()
 		std::string diffuseName = "lights[" + std::to_string(i) + "].m_diffuse";
 		std::string specularName = "lights[" + std::to_string(i) + "].m_specular";
 
-		m_swordShader.bindUniform(directionName.c_str(), *Light::m_lights[i]->GetDirection());
-		m_swordShader.bindUniform(ambientName.c_str(), *Light::m_lights[i]->GetAmbient());
-		m_swordShader.bindUniform(diffuseName.c_str(), *Light::m_lights[i]->GetDiffuse());
-		m_swordShader.bindUniform(specularName.c_str(), *Light::m_lights[i]->GetSpecular());
+		m_Shader.bindUniform(directionName.c_str(), *Light::m_lights[i]->GetDirection());
+		m_Shader.bindUniform(ambientName.c_str(), *Light::m_lights[i]->GetAmbient());
+		m_Shader.bindUniform(diffuseName.c_str(), *Light::m_lights[i]->GetDiffuse());
+		m_Shader.bindUniform(specularName.c_str(), *Light::m_lights[i]->GetSpecular());
 	}
-	
-		//m_swordShader.bindUniform("LightDirection", *Light::m_lights[i]->GetDirection());	
 
-	/*m_swordShader.bindUniform("Ka", materialAmbientLight);
-	m_swordShader.bindUniform("Kd", materialDiffuse);
-	m_swordShader.bindUniform("Ks", materialSpecular);
-	m_swordShader.bindUniform("specularPower", materialSpecturalPower);*/
-	//-------------------------------------------------------------
-	m_swordShader.bindUniform("ProjectionViewModel", m_camera.getProjectionView() * m_swordTransform);
-	m_swordShader.bindUniform("NormalMatrix", glm::inverseTranspose(glm::mat3(m_swordTransform)));
-	m_swordShader.bindUniform("cameraPosition", m_camera.getPosition());
-	
-	m_swordMesh.draw();
+	m_Shader.bindUniform("ProjectionViewModel", m_camera.getProjectionView() * m_soulspearTransform);
+	m_Shader.bindUniform("NormalMatrix", glm::inverseTranspose(glm::mat3(m_soulspearTransform)));
+	m_Shader.bindUniform("cameraPosition", m_camera.getPosition());
+	m_Shader.bindUniform("HasTextures", 1);
 
-	m_quadShader.bind();
+	m_soulspearMesh.draw();
 
-	m_quadMesh.draw();
+	//m_Shader.bindUniform("Ka", glm::vec3(0.1, 0.1, 0.1));
+	//m_Shader.bindUniform("Kd", glm::vec3(0.6, 0.3, 0.3));
+	//m_Shader.bindUniform("Ks", glm::vec3(0.2, 0.2, 0.2));
+
+	m_Shader.bindUniform("ProjectionViewModel", m_camera.getProjectionView() * m_bunnyTransform);
+	m_Shader.bindUniform("NormalMatrix", glm::inverseTranspose(glm::mat3(m_bunnyTransform)));
+	m_Shader.bindUniform("cameraPosition", m_camera.getPosition());
+	m_Shader.bindUniform("HasTextures", 0);
+
+	m_bunnyMesh.draw();
+
+	m_Shader.bindUniform("ProjectionViewModel", m_camera.getProjectionView() * m_c3poTransform);
+	m_Shader.bindUniform("NormalMatrix", glm::inverseTranspose(glm::mat3(m_c3poTransform)));
+	m_Shader.bindUniform("cameraPosition", m_camera.getPosition());
+	m_Shader.bindUniform("HasTextures", 1);
+
+	m_c3poMesh.draw();
 
 	////Binding tells graphics card to use this selected shader
 	//m_swordShader.bind();

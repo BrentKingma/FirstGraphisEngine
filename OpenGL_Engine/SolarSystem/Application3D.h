@@ -26,34 +26,20 @@ private:
 
 	glm::mat4 m_viewMatrix;
 	glm::mat4 m_projectionMatrix;
-
-
-	aie::ShaderProgram m_quadShader;
-	Mesh m_quadMesh;
-	glm::mat4 m_quadTransform;
-	aie::Texture m_gridTexture;
-
-	aie::ShaderProgram m_bunnyShader;
+	aie::ShaderProgram m_Shader;
+	//Soul Spear
+	aie::OBJMesh m_soulspearMesh;
+	glm::mat4 m_soulspearTransform;
+	aie::Texture m_soulspearTexture;
+	//Bunny
 	aie::OBJMesh m_bunnyMesh;
 	glm::mat4 m_bunnyTransform;
-	aie::Texture m_texture;
+	aie::Texture m_bunnyTexture;
+	//C3PO
+	aie::OBJMesh m_c3poMesh;
+	glm::mat4 m_c3poTransform;
+	aie::Texture m_c3poTexture;
 
-	aie::ShaderProgram m_swordShader;
-	aie::OBJMesh m_swordMesh;
-	glm::mat4 m_swordTransform;
-	aie::Texture m_swordTexture;
-
-	//struct Light
-	//{
-	//	Light()
-	//	{
-	//		direction = { 0.0f, 0.0f, 0.0f };
-	//	}
-	//	glm::vec3 direction;//ld
-	//	glm::vec3 diffuse;//ld
-	//	glm::vec3 specular;//ls
-	//};
-	//Light* m_light;
 	glm::vec3 m_ambientLight;//la
 
 	glm::vec3 materialDiffuse;

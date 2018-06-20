@@ -134,7 +134,7 @@ bool Application::hasWindowSizeChanged()
 int Application::createWindow(int a_screenWidth, int a_screenHeight, const char * a_windowName)
 {
 	//If something is broken does launch program, missing graphics card, missing monitor
-	if (glfwInit() == false)
+	if (glfwInit() == GL_FALSE)
 	{
 		return -1;
 	}
@@ -159,6 +159,10 @@ int Application::createWindow(int a_screenWidth, int a_screenHeight, const char 
 		glfwTerminate();
 		return -3;
 	}
+
+	auto major = ogl_GetMajorVersion();
+	auto minor = ogl_GetMinorVersion();
+	std::cout << major << "." << minor << std::endl;
 
 	glClearColor(0, 0, 0, 1.0f);
 	
